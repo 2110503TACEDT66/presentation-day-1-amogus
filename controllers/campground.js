@@ -1,10 +1,9 @@
-const Hospital = require("../models/Hospital");
-const vacCenter = require("../models/VacCenter");
+const Campground = require("../models/Campground");
 
-// @desc    Get all hospitals
-// @route   GET /api/v1/hospitals
+// @desc    Get all campground
+// @route   GET /api/v1/campgrounds
 // @access  Public
-exports.getHospitals = async (req, res) => {
+exports.getCampgrounds = async (req, res) => {
   try {
     let query;
 
@@ -25,7 +24,7 @@ exports.getHospitals = async (req, res) => {
       (match) => `$${match}`
     );
 
-    query = Hospital.find(JSON.parse(queryStr)).populate("appointments");
+    query = Campground.find(JSON.parse(queryStr)).populate("bookings");
 
     // Select Fields
     if (req.query.select) {
@@ -46,10 +45,10 @@ exports.getHospitals = async (req, res) => {
     const limit = parseInt(req.query.limit, 10) || 25;
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
-    const total = await Hospital.countDocuments();
+    const total = await Campground.countDocuments();
     query = query.skip(startIndex).limit(limit);
     // Execute query
-    const hospitals = await query;
+    const campgrounds = await query;
 
     // Pagination result
     const pagination = {};
@@ -70,86 +69,71 @@ exports.getHospitals = async (req, res) => {
 
     res
       .status(200)
-      .json({ success: true, count: hospitals.length, data: hospitals });
+      .json({ success: true, count: campgrounds.length, data: campgrounds });
   } catch (err) {
     res.status(400).json({ success: false });
   }
 };
 
-// @desc    Get single hospital
-// @route   GET /api/v1/hospitals/:id
+// @desc    Get single campground
+// @route   GET /api/v1/campgrounds/:id
 // @access  Public
-exports.getHospital = async (req, res) => {
+exports.getCampground = async (req, res) => {
   try {
-    const hospital = await Hospital.findById(req.params.id);
+    const campground = await Campground.findById(req.params.id);
 
-    if (!hospital) {
+    if (!campground) {
       return res.status(400).json({ success: false });
     }
-    res.status(200).json({ success: true, data: hospital });
+    res.status(200).json({ success: true, data: campground });
   } catch (err) {
     res.status(400).json({ success: false });
   }
 };
 
-// @desc    Create new hospital
-// @route   POST /api/v1/hospitals
+// @desc    Create new campground
+// @route   POST /api/v1/campgrounds
 // @access  Private
-exports.createHospital = async (req, res) => {
-  const hospital = await Hospital.create(req.body);
-  res.status(201).json({ success: true, data: hospital });
+exports.createCampground = async (req, res) => {
+  const campground = await Campground.create(req.body);
+  res.status(201).json({ success: true, data: campground });
 };
 
-// @desc    Update hospital
-// @route   PUT /api/v1/hospitals/:id
+// @desc    Update campground
+// @route   PUT /api/v1/campgrounds/:id
 // @access  Private
-exports.updateHospital = async (req, res) => {
+exports.updateCampground = async (req, res) => {
   try {
-    const hospital = await Hospital.findByIdAndUpdate(req.params.id, req.body, {
+    const campground = await Campground.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
 
-    if (!hospital) {
+    if (!campground) {
       return res.status(400).json({ success: false });
     }
 
-    res.status(200).json({ success: true, data: hospital });
+    res.status(200).json({ success: true, data: campground });
   } catch (err) {
     res.status(400).json({ success: false });
   }
 };
 
-// @desc    Delete hospital
-// @route   DELETE /api/v1/hospitals/:id
+// @desc    Delete campground
+// @route   DELETE /api/v1/campgrounds/:id
 // @access  Private
-exports.deleteHospital = async (req, res) => {
+exports.deleteCampground = async (req, res) => {
   try {
-    const hospital = await Hospital.findById(req.params.id);
+    const campground = await Campground.findById(req.params.id);
 
-    if (!hospital) {
+    if (!campground) {
       return res.status(400).json({ success: false });
     }
 
-    await hospital.deleteOne();
+    await campground.deleteOne();
 
-    res.status(200).json({ success: true, data: hospital });
+    res.status(200).json({ success: true, data: campground });
   } catch (err) {
     res.status(400).json({ success: false });
   }
-};
-
-// @desc    Get all vacCenters
-// @route   GET /api/v1/hospitals/vacCenters
-// @access  Public
-exports.getVacCenters = async (req, res) => {
-  vacCenter.getAll((err, data) => {
-    if (err) {
-      res.status(500).send({
-        masg: err.message || "Some error occurred while retrieving vacCenters.",
-      });
-    } else {
-      res.status(200).send(data);
-    }
-  });
 };

@@ -1,6 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const hospitals = require("./routes/hospitals");
+const campgrounds = require("./routes/campgrounds");
 const auth = require("./routes/auth");
 const appointments = require("./routes/appointments");
 const connectDB = require("./config/db");
