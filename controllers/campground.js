@@ -1,4 +1,6 @@
 const Campground = require("../models/Campground");
+const multer = require("multer");
+const upload = multer();
 
 // @desc    Get all campground
 // @route   GET /api/v1/campgrounds
@@ -81,7 +83,6 @@ exports.getCampgrounds = async (req, res) => {
 exports.getCampground = async (req, res) => {
   try {
     const campground = await Campground.findById(req.params.id);
-
     if (!campground) {
       return res.status(400).json({ success: false });
     }
@@ -95,8 +96,30 @@ exports.getCampground = async (req, res) => {
 // @route   POST /api/v1/campgrounds
 // @access  Private
 exports.createCampground = async (req, res) => {
-  const campground = await Campground.create(req.body);
-  res.status(201).json({ success: true, data: campground });
+  try {
+    //create array of base64 images
+    const images = req.files.map((file) => {
+      //also set the content type
+      return {
+        data: file.buffer.toString("base64"),
+        contentType: file.mimetype,
+      };
+    });
+    const info = JSON.parse(req.body.data);
+    const { name, address, province, postalcode, tel} = info;
+    const campground = await Campground.create({
+      name,
+      address,
+      province,
+      postalcode,
+      tel,
+      images
+    });
+
+    res.status(201).json({ success: true, data: campground });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 };
 
 // @desc    Update campground
@@ -133,6 +156,24 @@ exports.deleteCampground = async (req, res) => {
     await campground.deleteOne();
 
     res.status(200).json({ success: true, data: campground });
+  } catch (err) {
+    res.status(400).json({ success: false });
+  }
+};
+
+// @desc get image
+// @route GET /api/v1/campgrounds/:id/image/:index
+// @access Private
+exports.getImage = async (req, res) => {
+  try {
+    const campground = await Campground.findById(req.params.id);
+    if (!campground) {
+      return res.status(400).json({ success: false });
+    }
+    const image = campground.images[req.params.index];
+    const img = Buffer.from(image.data, "base64");
+    res.contentType(image.contentType);
+    res.send(img);
   } catch (err) {
     res.status(400).json({ success: false });
   }
