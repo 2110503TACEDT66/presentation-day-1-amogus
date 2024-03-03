@@ -1,4 +1,4 @@
-const Appointment = require("../models/Appointment.js");
+const Appointment = require("../models/Booking.js");
 const Hospital = require("../models/Hospital.js");
 
 //@desc Get all appointments
