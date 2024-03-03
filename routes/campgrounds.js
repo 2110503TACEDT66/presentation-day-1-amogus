@@ -4,11 +4,11 @@ const { getCampground, getCampgrounds, createCampground, updateCampground, delet
 
 
 // Include other resource routers
-const appointmentRouter = require("./bookings");
+const bookingRouter = require("./bookings");
 
 const router = express.Router();
 
-router.use("/:hospitalId/appointments/", appointmentRouter);
+router.use("/:campgroundId/bookings/", bookingRouter);
 
 router
   .route("/")
