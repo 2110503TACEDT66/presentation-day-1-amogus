@@ -4,7 +4,7 @@ const { getCampground, getCampgrounds, createCampground, updateCampground, delet
 
 
 // Include other resource routers
-const appointmentRouter = require("./appointments");
+const appointmentRouter = require("./bookings");
 
 const router = express.Router();
 
