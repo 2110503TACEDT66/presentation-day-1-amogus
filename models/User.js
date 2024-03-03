@@ -7,6 +7,12 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please add a name"],
   },
+  telephone: {
+    type: String,
+    required: [true, "Please add a telephone"],
+    unique: true,
+    match: [/^\+66\d{9,10}$/, "Please add a valid telephone number"],
+  },
   email: {
     type: String,
     required: [true, "Please add an email"],
@@ -36,6 +42,7 @@ const UserSchema = new mongoose.Schema({
 });
 
 // Encrypt password using bcrypt
+// eslint-disable-next-line no-unused-vars
 UserSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
