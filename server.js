@@ -66,7 +66,7 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 // Rate limiting
 const limiter = reateLimit({
   windowMs: 10 * 60 * 1000, // 10 mins
-  max: 1,
+  max: 1000,
 });
 app.use(limiter);
 
