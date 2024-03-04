@@ -25,6 +25,10 @@ const CampgroundSchema = new mongoose.Schema(
     tel: {
       type: String,
     },
+    images: [{
+      data: String,
+      contentType: String 
+    }]
   },
   {
     toJSON: { virtuals: true },
