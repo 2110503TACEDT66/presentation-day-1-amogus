@@ -1,0 +1,23 @@
+@startuml Get All Bookings
+
+header Bookings System Sequence Diagram
+footer Page %page% of %lastpage%
+title "Get All Bookings (GET)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:Server" as server
+participant "<<middleware>>\n:AuthMiddleware" as authMiddleware
+participant "<<router>>\n:Bookings" as bookingsRouter
+participant "<<controllers>>\n:Booking" as bookingController
+database "<<MongoDB>>\n:BookingsDB" as BookingsDatabase
+
+client->server ++: GET /bookings
+server->authMiddleware ++: protect
+authMiddleware --> server --: User authenticated
+server->bookingsRouter ++: Route to Bookings
+bookingsRouter->bookingController ++: getBookings()
+bookingController->BookingsDatabase ++: Find all bookings
+BookingsDatabase --> bookingController --: Return bookings list
+bookingController-->client --: Response with bookings list
+
+@enduml

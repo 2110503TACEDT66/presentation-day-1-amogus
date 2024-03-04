@@ -1,0 +1,23 @@
+@startuml Get Campground Image
+
+header Campgrounds Booking System Sequence Diagram
+footer Page %page% of %lastpage%
+title "Get Campground Image (GET)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:Server" as server
+participant "<<middleware>>\n:AuthMiddleware" as authMiddleware
+participant "<<router>>\n:Campgrounds" as campgroundsRouter
+participant "<<controllers>>\n:Campground" as campgroundController
+database "<<FileSystem>>\n:ImagesStorage" as ImagesStorage
+
+client->server ++: GET /campgrounds/:id/image/:index
+server->authMiddleware ++: protect
+authMiddleware --> server --: User authenticated
+server->campgroundsRouter ++: Route to Campgrounds
+campgroundsRouter->campgroundController ++: getImage()
+campgroundController->ImagesStorage ++: Fetch image
+ImagesStorage --> campgroundController --: Return image
+campgroundController-->client --: Response with image
+
+@enduml

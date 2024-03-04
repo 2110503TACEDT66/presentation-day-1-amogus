@@ -1,0 +1,20 @@
+@startuml Get Specific Campground
+
+header Campgrounds Booking System Sequence Diagram
+footer Page %page% of %lastpage%
+title "Get Specific Campground (GET)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:Server" as server
+participant "<<router>>\n:Campgrounds" as campgroundsRouter
+participant "<<controllers>>\n:Campground" as campgroundController
+database "<<MongoDB>>\n:CampgroundsDB" as CampgroundsDatabase
+
+client->server ++: GET /campgrounds/:id
+server->campgroundsRouter ++: Route to Campgrounds
+campgroundsRouter->campgroundController ++: getCampground()
+campgroundController->CampgroundsDatabase ++: Find campground by ID
+CampgroundsDatabase --> campgroundController --: Return specific campground
+campgroundController-->client --: Response with specific campground
+
+@enduml

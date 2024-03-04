@@ -1,6 +1,5 @@
 const Campground = require("../models/Campground");
 const multer = require("multer");
-const upload = multer();
 
 // @desc    Get all campground
 // @route   GET /api/v1/campgrounds

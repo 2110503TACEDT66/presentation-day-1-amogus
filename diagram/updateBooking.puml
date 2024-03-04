@@ -1,0 +1,23 @@
+@startuml Update Specific Booking
+
+header Bookings System Sequence Diagram
+footer Page %page% of %lastpage%
+title "Update Specific Booking (PUT)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:Server" as server
+participant "<<middleware>>\n:AuthMiddleware" as authMiddleware
+participant "<<router>>\n:Bookings" as bookingsRouter
+participant "<<controllers>>\n:Booking" as bookingController
+database "<<MongoDB>>\n:BookingsDB" as BookingsDatabase
+
+client->server ++: PUT /bookings/:id
+server->authMiddleware ++: protect, authorize("user", "admin")
+authMiddleware --> server --: User authenticated and authorized
+server->bookingsRouter ++: Route to Bookings
+bookingsRouter->bookingController ++: updateBooking()
+bookingController->BookingsDatabase ++: Update booking by ID
+BookingsDatabase --> bookingController --: Return updated booking
+bookingController-->client --: Response with updated booking
+
+@enduml

@@ -1,0 +1,23 @@
+@startuml Get Specific Booking
+
+header Bookings System Sequence Diagram
+footer Page %page% of %lastpage%
+title "Get Specific Booking (GET)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:Server" as server
+participant "<<middleware>>\n:AuthMiddleware" as authMiddleware
+participant "<<router>>\n:Bookings" as bookingsRouter
+participant "<<controllers>>\n:Booking" as bookingController
+database "<<MongoDB>>\n:BookingsDB" as BookingsDatabase
+
+client->server ++: GET /bookings/:id
+server->authMiddleware ++: protect
+authMiddleware --> server --: User authenticated
+server->bookingsRouter ++: Route to Bookings
+bookingsRouter->bookingController ++: getBooking()
+bookingController->BookingsDatabase ++: Find booking by ID
+BookingsDatabase --> bookingController --: Return specific booking
+bookingController-->client --: Response with specific booking
+
+@enduml
