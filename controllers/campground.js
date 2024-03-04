@@ -98,26 +98,21 @@ exports.getCampground = async (req, res) => {
 exports.createCampground = async (req, res) => {
   try {
     //create array of base64 images
-    const images = req.files.map((file) => {
+    if(req.files) {
+      const images = req.files.map((file) => {
       //also set the content type
-      return {
-        data: file.buffer.toString("base64"),
-        contentType: file.mimetype,
-      };
-    });
-    const info = JSON.parse(req.body.data);
-    const { name, address, province, postalcode, tel} = info;
-    const campground = await Campground.create({
-      name,
-      address,
-      province,
-      postalcode,
-      tel,
-      images
-    });
+        return {
+          data: file.buffer.toString("base64"),
+          contentType: file.mimetype,
+        };
+      });
+      req.body.images = images;
+    }
+    const campground = await Campground.create(req.body);
 
     res.status(201).json({ success: true, data: campground });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ success: false, error: error.message });
   }
 
