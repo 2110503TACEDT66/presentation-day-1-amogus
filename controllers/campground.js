@@ -95,8 +95,14 @@ exports.getCampground = async (req, res) => {
 // @route   POST /api/v1/campgrounds
 // @access  Private
 exports.createCampground = async (req, res) => {
-  const campground = await Campground.create(req.body);
-  res.status(201).json({ success: true, data: campground });
+  try {
+    const campground = await Campground.create(req.body);
+    res.status(201).json({ success: true, data: campground });
+  }
+  catch (err) {
+    res.status(400).json({ success: false, msg: err.message || "Cannot create campground"});
+  }
+  
 };
 
 // @desc    Update campground
