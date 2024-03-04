@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+actor "User" as user
+rectangle "Campground Booking" as VacQSystem {    
+    usecase "Register" as register
+    usecase "View\nCampgrounds" as viewCampgrounds
+    usecase "Manage\nBooking" as manageBooking
+    usecase "Manage\nCampground" as manageCampground
+}
+
+user -- register
+user -- viewCampgrounds
+user -- manageBooking
+
+actor "Admin" as admin
+register -- admin
+manageCampground -- admin
+manageBooking -- admin
+@enduml
