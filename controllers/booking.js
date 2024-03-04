@@ -1,12 +1,12 @@
 const Booking = require("../models/Booking.js");
 const Campground = require("../models/Campground.js");
 
-//@desc Get all appointments
-//@route GET /api/v1/appointments
+//@desc Get all bookings
+//@route GET /api/v1/bookings
 //@access Private
 exports.getBookings = async (req, res, next) => {
   let query;
-  // General users can see only their appointments!
+  // General users can see only their bookings!
   if (req.params.campgroundId) {
     query = Booking.find({ hospital: req.params.campgroundId }).populate({
       path: "campground",
@@ -81,7 +81,7 @@ exports.addBooking = async (req, res, next) => {
 
     // add user Id to req.body
     req.body.user = req.user.id;
-    // Check for existing appointment
+    // Check for existing booking
     const existedBookings = await Booking.find({ user: req.user.id });
     // If the user is not an admin, they can only create 3 bookings
     if (existedBookings.length >= 3 && req.user.role !== "admin") {
@@ -104,8 +104,8 @@ exports.addBooking = async (req, res, next) => {
   }
 };
 
-//@desc Update appointment
-//@route PUT /api/v1/appointments/:id
+//@desc Update booking
+//@route PUT /api/v1/bookings/:id
 //@access Private
 exports.updateBooking = async (req, res, next) => {
   try {
@@ -118,7 +118,7 @@ exports.updateBooking = async (req, res, next) => {
       });
     }
 
-    // Make sure user is appointment owner
+    // Make sure user is booking owner
     if (
       booking.user.toString() !== req.user.id &&
       req.user.role !== "admin"
@@ -146,8 +146,8 @@ exports.updateBooking = async (req, res, next) => {
   }
 };
 
-//@desc Delete appointment
-//@route DELETE /api/v1/appointments/:id
+//@desc Delete booking
+//@route DELETE /api/v1/bookings/:id
 //@access Private
 exports.deleteBooking = async (req, res, next) => {
   try {
@@ -160,7 +160,7 @@ exports.deleteBooking = async (req, res, next) => {
       });
     }
 
-    // Make sure user is appointment owner
+    // Make sure user is booking owner
     if (
       booking.user.toString() !== req.user.id &&
       req.user.role !== "admin"
