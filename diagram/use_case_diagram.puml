@@ -1,4 +1,4 @@
-@startuml
+@startuml usecase diagram
 left to right direction
 actor "User" as user
 rectangle "Campground Booking" as VacQSystem {    

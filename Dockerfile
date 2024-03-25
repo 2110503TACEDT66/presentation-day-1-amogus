@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Make the application's port available to the outside world
-EXPOSE ${PORT}
+EXPOSE 5000
 
 # Start the application
-CMD [ "npm", "start" ]
+CMD [ "node", "server.js" ]
